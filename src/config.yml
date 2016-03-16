@@ -1,0 +1,30 @@
+mySQL:
+  host:
+  port:
+  user:
+  password:
+
+stage1:
+  monsters:
+  - ZOMBIE
+  - SKELETON
+  minNum: 5
+  maxNum: 20
+stage2:
+  ores:
+  - COAL_ORE
+  - DIAMOND_ORE
+  - EMERALD_ORE
+  - IRON_ORE
+  - LAPIS_ORE
+  - QUARTZ_ORE
+  - REDSTONE_ORE
+  - GOLD_ORE
+  minNum: 7
+  maxNum: 10
+
+reward:
+- DIAMOND 3
+- IRON 5
+- STONE 32
+- DIRT 64

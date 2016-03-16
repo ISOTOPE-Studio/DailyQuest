@@ -1,11 +1,14 @@
 package cc.isotopestudio.DailyQuest;
 
 import java.io.File;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import cc.isotopestudio.DailyQuest.command.CommandQuest;
+import cc.isotopestudio.DailyQuest.util.MySQL;
 
 public class DailyQuest extends JavaPlugin {
 	public static final String prefix = (new StringBuilder()).append(ChatColor.GREEN).append("[")
@@ -29,7 +32,18 @@ public class DailyQuest extends JavaPlugin {
 		createFile("config");
 
 		this.getCommand("quest").setExecutor(new CommandQuest());
-
+		
+		MySQL MySQL = new MySQL("host.name", "port", "database", "user", "pass");
+		Connection c = null;
+		try {
+			c = MySQL.openConnection();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			getLogger().info(pluginName + "数据库出错 Error1");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			getLogger().info(pluginName + "数据库出错 Error2");
+		}
 		getLogger().info(pluginName + "成功加载!");
 		getLogger().info(pluginName + "由ISOTOPE Studio制作!");
 		getLogger().info("http://isotopestudio.cc");
