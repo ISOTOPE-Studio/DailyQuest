@@ -38,8 +38,11 @@ public class DailyQuest extends JavaPlugin {
 
 		createFile("config");
 		if (SqlManager.connectMySQL(this) == false) {
+			getLogger().info(pluginName + "无法加载!");
+			getLogger().info(pluginName + "数据库无法连接！");
 			this.getPluginLoader().disablePlugin(this);
 		}
+		
 		BukkitTask task1 = new DailyUpdate(this).runTaskTimer(this, 10, 36000); 
 		
 		this.getCommand("quest").setExecutor(new CommandQuest());

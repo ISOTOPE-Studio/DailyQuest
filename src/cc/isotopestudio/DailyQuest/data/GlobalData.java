@@ -3,6 +3,7 @@ package cc.isotopestudio.DailyQuest.data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,10 +18,6 @@ public class GlobalData {
 	private static Material stage2Type;
 	private static int stage2Limit;
 	private static Location[] stage3Location;
-
-	public GlobalData(DailyQuest plugin) {
-
-	}
 
 	public static EntityType getStage1Type() {
 		return stage1Type;
@@ -42,13 +39,31 @@ public class GlobalData {
 		return stage3Location[step];
 	}
 
-	public static void update(DailyQuest plugin) {
+	public static void update(DailyQuest plugin, Statement statement, String today) {
 		// Gen global data
-		
-		// Insert to database and plugin variables
-		Statement statement = null;
+
+		List<String> stage1List = plugin.getConfig().getStringList("stage1.monsters");
+		int ran = random(0, stage1List.size() - 1);
+		String stage1Monster = stage1List.get(ran);
+		int stage1Num = random(plugin.getConfig().getInt("stage1.minNum"), plugin.getConfig().getInt("stage1.maxNum"));
+
+		List<String> stage2List = plugin.getConfig().getStringList("stage2.ores");
+		ran = random(0, stage2List.size() - 1);
+		String stage2Material = stage2List.get(ran);
+		int stage2Num = random(plugin.getConfig().getInt("stage2.minNum"), plugin.getConfig().getInt("stage2.maxNum"));
+		String world = plugin.getConfig().getString("stage3.world");
+		int radius = plugin.getConfig().getInt("stage3.radius");
 		try {
-			statement = DailyQuest.c.createStatement();
+			statement.executeUpdate("insert into global values(" + today + ",\"" + stage1Monster + "\"," + stage1Num
+					+ ",\"" + stage2Material + "\"," + stage2Num + ");");
+			for (int i = 0; i < 10; i++) {
+				int x = random(-radius, radius);
+				int y = random(-radius, radius);
+				int z = random(-radius, radius);
+				statement.executeUpdate(
+						"insert into globalstage3 values(NULL,\"" + world + "\"," + x + "," + y + "," + z + ");");
+			}
+			// Insert to database and plugin variables
 			ResultSet res = statement.executeQuery("select * from global;");
 			res.next();
 			stage1Type = EntityType.valueOf(res.getString("stage1Type"));
@@ -65,6 +80,11 @@ public class GlobalData {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static int random(int min, int max) {
+		double ran = Math.random() * (max - min + 1) + min;
+		return (int) ran;
 	}
 
 }

@@ -23,6 +23,9 @@ stage2:
   - GOLD_ORE
   minNum: 7
   maxNum: 10
+stage3:
+  world: world
+  radius: 300
 
 reward:
 - DIAMOND 3
