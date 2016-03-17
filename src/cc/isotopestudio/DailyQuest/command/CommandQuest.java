@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import cc.isotopestudio.DailyQuest.DailyQuest;
+import cc.isotopestudio.DailyQuest.data.GlobalData;
 import cc.isotopestudio.DailyQuest.data.PlayerData;
 
 public class CommandQuest implements CommandExecutor {
@@ -16,14 +17,14 @@ public class CommandQuest implements CommandExecutor {
 				sender.sendMessage(DailyQuest.prefix + "必须要玩家才能执行");
 				return true;
 			}
-			if (args.length != 0 || !args[0].equalsIgnoreCase("help")) {
+			if (args == null || args.length != 0 || !args[0].equalsIgnoreCase("help")) {
 				Player player = (Player) sender;
 				if (args[0].equalsIgnoreCase("accept")) {
-					if(PlayerData.getStage(player)>=4){
+					if (PlayerData.getStage(player) >= 4) {
 						player.sendMessage("已完成");
 						return true;
 					}
-					if(PlayerData.getStage(player)>=1){
+					if (PlayerData.getStage(player) >= 1) {
 						player.sendMessage("正在进行");
 						return true;
 					}
@@ -33,6 +34,10 @@ public class CommandQuest implements CommandExecutor {
 				}
 				if (args[0].equalsIgnoreCase("info")) {
 					player.sendMessage("任务信息");
+					return true;
+				}
+				if (args[0].equalsIgnoreCase("today")) {
+					player.sendMessage(GlobalData.getStage1Type().toString() + ": " + GlobalData.getStage1Limit());
 					return true;
 				}
 
