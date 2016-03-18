@@ -63,22 +63,28 @@ public class GlobalData {
 				statement.executeUpdate(
 						"insert into globalstage3 values(NULL,\"" + world + "\"," + x + "," + y + "," + z + ");");
 			}
-			// Insert to database and plugin variables
-			ResultSet res = statement.executeQuery("select * from global;");
-			res.next();
-			stage1Type = EntityType.valueOf(res.getString("stage1Type"));
-			stage1Limit = res.getInt("stage1Num");
-			stage2Type = Material.getMaterial(res.getString("stage2Type"));
-			stage2Limit = res.getInt("stage2Num");
-			stage3Location = new Location[10];
-			res = statement.executeQuery("select * from globalstage3;");
-			for (int i = 0; i < 10; i++) {
-				res.next();
-				stage3Location[i] = new Location(plugin.getServer().getWorld(res.getString("world")), res.getInt("X"),
-						res.getInt("Y"), res.getInt("Z"));
-			}
+			insertInformation(plugin, statement);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+	}
+
+	public static void insertInformation(DailyQuest plugin, Statement statement) throws SQLException {
+		// Insert to database and plugin variables
+		ResultSet res = statement.executeQuery("select * from global;");
+		res.next();
+		stage1Type = EntityType.valueOf(res.getString("stage1Type"));
+		stage1Limit = res.getInt("stage1Num");
+		System.out.println(stage1Type + ": " + stage1Limit);
+		stage2Type = Material.getMaterial(res.getString("stage2Type"));
+		stage2Limit = res.getInt("stage2Num");
+		System.out.println(stage2Type + ": " + stage2Limit);
+		stage3Location = new Location[10];
+		res = statement.executeQuery("select * from globalstage3;");
+		for (int i = 0; i < 10; i++) {
+			res.next();
+			stage3Location[i] = new Location(plugin.getServer().getWorld(res.getString("world")), res.getInt("X"),
+					res.getInt("Y"), res.getInt("Z"));
 		}
 	}
 

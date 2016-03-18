@@ -5,10 +5,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.bukkit.ChatColor;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import cc.isotopestudio.DailyQuest.command.CommandQuest;
+import cc.isotopestudio.DailyQuest.listener.StagesListener;
 import cc.isotopestudio.DailyQuest.task.DailyUpdate;
 import cc.isotopestudio.DailyQuest.util.MySQL;
 import cc.isotopestudio.DailyQuest.util.SqlManager;
@@ -17,7 +19,7 @@ public class DailyQuest extends JavaPlugin {
 	public static final String prefix = (new StringBuilder()).append(ChatColor.GREEN).append("[")
 			.append(ChatColor.ITALIC).append(ChatColor.BOLD).append("每日任务").append(ChatColor.RESET)
 			.append(ChatColor.GREEN).append("]").append(ChatColor.RESET).toString();
-	public static final String pluginName = "DailyQuest";
+	public static final String pluginName = "DailyQuest test 0.0.1.3";
 
 	// mySQL
 	public static MySQL MySQL;
@@ -46,7 +48,8 @@ public class DailyQuest extends JavaPlugin {
 		BukkitTask task1 = new DailyUpdate(this).runTaskTimer(this, 10, 36000); 
 		
 		this.getCommand("quest").setExecutor(new CommandQuest());
-
+		PluginManager pm = this.getServer().getPluginManager();
+		pm.registerEvents(new StagesListener(this), this);
 		getLogger().info(pluginName + "成功加载!");
 		getLogger().info(pluginName + "由ISOTOPE Studio制作!");
 		getLogger().info("http://isotopestudio.cc");

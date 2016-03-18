@@ -45,6 +45,7 @@ public class DailyUpdate extends BukkitRunnable {
 					System.out.println(day);
 					if (day.equals(today)) {
 						System.out.println("true");
+						GlobalData.insertInformation(plugin, statement);
 						return;
 					}
 				}
@@ -67,7 +68,7 @@ public class DailyUpdate extends BukkitRunnable {
 					+ " id int unsigned not null auto_increment primary key," + " world text not null,"
 					+ " X SMALLINT not null," + " Y SMALLINT not null," + " Z SMALLINT not null);");
 			statement.executeUpdate("create table players(" + " name char(20) not null primary key,"
-					+ " stage tinyint not null," + " step tinyint not null," + " time tinyint not null);");
+					+ " stage tinyint not null," + " step tinyint not null," + " times tinyint not null);");
 			System.out.println("Created tables");
 		} catch (SQLException e1) {
 			e1.printStackTrace();
