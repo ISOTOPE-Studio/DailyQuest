@@ -3,7 +3,10 @@ package cc.isotopestudio.DailyQuest.data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,6 +21,7 @@ public class GlobalData {
 	private static Material stage2Type;
 	private static int stage2Limit;
 	private static Location[] stage3Location;
+	public static HashMap<String, Integer> tasksLimit;
 
 	public static EntityType getStage1Type() {
 		return stage1Type;
@@ -39,9 +43,17 @@ public class GlobalData {
 		return stage3Location[step];
 	}
 
+	public static int getTasksLimit(String name) {
+		try {
+			int limit = tasksLimit.get(name);
+			return limit;
+		} catch (Exception e) {
+			return 0;
+		}
+	}
+
 	public static void update(DailyQuest plugin, Statement statement, String today) {
 		// Gen global data
-
 		List<String> stage1List = plugin.getConfig().getStringList("stage1.monsters");
 		int ran = random(0, stage1List.size() - 1);
 		String stage1Monster = stage1List.get(ran);
@@ -85,6 +97,20 @@ public class GlobalData {
 			res.next();
 			stage3Location[i] = new Location(plugin.getServer().getWorld(res.getString("world")), res.getInt("X"),
 					res.getInt("Y"), res.getInt("Z"));
+		}
+		tasksLimit = new HashMap<String, Integer>();
+		tasksLimit.put("default", plugin.getConfig().getInt("accept.default", 1));
+		Set<String> limitSet = plugin.getConfig().getKeys(true);
+		Iterator<String> it = limitSet.iterator();
+		while (it.hasNext()) {
+			String temp = it.next();
+			System.out.print(temp);
+			String tempSplit[] = temp.split("[.]");
+			if (tempSplit.length == 2 && tempSplit[0].equals("accept")) {
+				//plugin.getLogger().info(temp);
+				int tempLimit = plugin.getConfig().getInt(temp);
+				tasksLimit.put(tempSplit[1], tempLimit);
+			}
 		}
 	}
 

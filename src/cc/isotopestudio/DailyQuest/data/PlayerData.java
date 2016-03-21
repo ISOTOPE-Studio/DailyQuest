@@ -3,6 +3,8 @@ package cc.isotopestudio.DailyQuest.data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.bukkit.entity.Player;
 
@@ -89,6 +91,30 @@ public class PlayerData {
 			System.out.print("…Ë÷√Step≥ˆ¥Ì£°");
 			return;
 		}
+	}
+
+	public static int getLimit(Player player) {
+		int limit = 0;
+		Set<String> groupList = GlobalData.tasksLimit.keySet();
+		Iterator<String> it = groupList.iterator();
+		while (it.hasNext()) {
+			String temp = it.next();
+			if (player.hasPermission("dailyquest.accept." + temp)) {
+				limit = GlobalData.getTasksLimit(temp);
+				return limit;
+			}
+		}
+		limit = GlobalData.getTasksLimit("default");
+		return limit;
+	}
+
+	public static boolean canAccept(Player player) {
+		int times = getTimes(player);
+		int limit = getLimit(player);
+		if (limit <= times) {
+			return false;
+		} else
+			return true;
 	}
 
 	public static void sendReward(Player player) {

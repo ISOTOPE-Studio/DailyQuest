@@ -5,6 +5,11 @@ mySQL:
   password: root
   database: dailyquest
 
+accept:
+  default: 2
+  vip1: 3
+  builder: 5
+
 stage1:
   monsters:
   - ZOMBIE
