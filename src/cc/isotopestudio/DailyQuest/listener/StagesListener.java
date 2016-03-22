@@ -1,5 +1,6 @@
 package cc.isotopestudio.DailyQuest.listener;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -42,7 +43,11 @@ public class StagesListener implements Listener {
 		if (PlayerData.getStep(player) >= GlobalData.getStage1Limit()) {
 			PlayerData.setStage(player, 2);
 			PlayerData.setStep(player, 0);
-			player.sendMessage("第二阶段");
+			player.sendMessage(new StringBuilder("    ").append(ChatColor.BLUE).append("任务进行到第二阶段").toString());
+			player.sendMessage(new StringBuilder("    ").append(ChatColor.RED)
+					.append("挖 " + GlobalData.getStage2Limit() + " 个" + GlobalData.getStage2Type().toString())
+					.toString());
+
 			return;
 		} else {
 			player.sendMessage("Progress: " + PlayerData.getStep(player) + "/" + GlobalData.getStage1Limit());
@@ -65,7 +70,12 @@ public class StagesListener implements Listener {
 		if (PlayerData.getStep(player) >= GlobalData.getStage2Limit()) {
 			PlayerData.setStage(player, 3);
 			PlayerData.setStep(player, 0);
-			player.sendMessage("第三阶段");
+			player.sendMessage(new StringBuilder("    ").append(ChatColor.BLUE).append("任务进行到第三阶段").toString());
+			player.sendMessage(new StringBuilder("    ").append(ChatColor.RED).append("到达 10 个指定地点").toString());
+			Location loc = GlobalData.getStage3Location(PlayerData.getStep(player));
+			player.sendMessage(new StringBuilder("    ").append(ChatColor.RED)
+					.append("下一个地点：X " + loc.getBlockX() + " Z " + loc.getBlockZ()).toString());
+
 			return;
 		} else {
 			player.sendMessage("Progress: " + PlayerData.getStep(player) + "/" + GlobalData.getStage2Limit());
@@ -83,16 +93,18 @@ public class StagesListener implements Listener {
 		player.sendMessage("LOC");
 		player.sendMessage(playerLoc.getBlockX() + "x/x" + requiredLoc.getBlockX());
 		player.sendMessage(playerLoc.getBlockZ() + "z/z" + requiredLoc.getBlockZ());
-		if (Math.abs(playerLoc.getBlockX() - requiredLoc.getBlockX())<=10)
+		if (Math.abs(playerLoc.getBlockX() - requiredLoc.getBlockX()) >= 10)
 			return;
-		if (Math.abs(playerLoc.getBlockZ() - requiredLoc.getBlockZ())<=10)
+		if (Math.abs(playerLoc.getBlockZ() - requiredLoc.getBlockZ()) >= 10)
 			return;
 		PlayerData.increaseStep(player, 1);
 		if (PlayerData.getStep(player) >= 10) {
 			PlayerData.setStage(player, 0);
 			PlayerData.setStep(player, 0);
 			PlayerData.increaseTimes(player, 1);
-			player.sendMessage("完成");
+			player.sendMessage(
+					new StringBuilder(DailyQuest.prefix).append(ChatColor.YELLOW).append("任务完成！").toString());
+
 			PlayerData.sendReward(player);
 			return;
 		} else {

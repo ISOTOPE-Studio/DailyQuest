@@ -5,8 +5,12 @@ mySQL:
   password: root
   database: dailyquest
 
+#每日任务次数的限制
 accept:
+  #default组，所有人默认的限制
   default: 2
+  #以下组可以自定义
+  #权限: dailyquest.accept.<name>
   vip1: 3
   builder: 5
 
@@ -33,7 +37,7 @@ stage3:
   radius: 300
 
 reward:
-- DIAMOND 3
-- IRON 5
-- STONE 32
-- DIRT 64
+- give %player% diamond 1;give %player% stone 64;5
+- give %player% diamond 10;2
+- give %player% gold_block 2;2
+- give %player% emerald 10;1

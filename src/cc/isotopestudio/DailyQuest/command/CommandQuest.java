@@ -21,24 +21,25 @@ public class CommandQuest implements CommandExecutor {
 				return true;
 			}
 			Player player = (Player) sender;
-			System.out.print(args.length);
-			System.out.print(args == null);
 			if (args.length > 0 && !args[0].equalsIgnoreCase("help")) {
 				if (args[0].equalsIgnoreCase("accept")) {
 					if (!PlayerData.canAccept(player)) {
-						player.sendMessage("不能再接受新的任务了");
-						return true;
-					}
-					if (PlayerData.getStage(player) == 0) {
-						player.sendMessage("已完成");
+						player.sendMessage(new StringBuilder(DailyQuest.prefix).append(ChatColor.RED)
+								.append("你不能再接受新的任务了").toString());
 						return true;
 					}
 					if (PlayerData.getStage(player) >= 1) {
-						player.sendMessage("正在进行");
+						player.sendMessage(new StringBuilder(DailyQuest.prefix).append(ChatColor.BLUE).append("任务正在进行")
+								.toString());
 						return true;
 					}
 					PlayerData.setStage(player, 1);
-					player.sendMessage("任务开始");
+					player.sendMessage(
+							new StringBuilder(DailyQuest.prefix).append(ChatColor.YELLOW).append("任务现在开始！").toString());
+					player.sendMessage(new StringBuilder("    ").append(ChatColor.BLUE).append("任务进行到第一阶段").toString());
+					player.sendMessage(new StringBuilder("    ").append(ChatColor.RED)
+							.append("杀死 " + GlobalData.getStage1Limit() + " 只" + GlobalData.getStage1Type().toString())
+							.toString());
 					return true;
 				}
 				if (args[0].equalsIgnoreCase("info")) {

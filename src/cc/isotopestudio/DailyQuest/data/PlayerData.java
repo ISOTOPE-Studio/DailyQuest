@@ -3,10 +3,16 @@ package cc.isotopestudio.DailyQuest.data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+
+import cc.isotopestudio.DailyQuest.DailyQuest;
 
 public class PlayerData {
 
@@ -118,7 +124,26 @@ public class PlayerData {
 	}
 
 	public static void sendReward(Player player) {
-		player.sendMessage("Send reward");
+
+		int n = GlobalData.random(0, GlobalData.rewardProSum);
+		int index = 0;
+		while (true) {
+			if (GlobalData.rewardPro.get(index) < n) {
+				System.out.print(GlobalData.rewardPro.get(index) + ":" + n);
+				index++;
+				continue;
+			}
+			break;
+		}
+		String line = GlobalData.rewardList.get(index);
+		line = line.replace("%player%", player.getName());
+		String commands[] = line.split(";");
+		ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+		for (int i = 0; i < commands.length - 1; i++) {
+			Bukkit.dispatchCommand(console, commands[i]);
+			player.sendMessage("Debug：获得命令" + commands[i]);
+		}
+		player.sendMessage(new StringBuilder(DailyQuest.prefix).append(ChatColor.YELLOW).append("获得奖励！").toString());
 	}
 
 }

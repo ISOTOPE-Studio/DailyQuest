@@ -3,6 +3,7 @@ package cc.isotopestudio.DailyQuest.data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +22,12 @@ public class GlobalData {
 	private static Material stage2Type;
 	private static int stage2Limit;
 	private static Location[] stage3Location;
+
 	public static HashMap<String, Integer> tasksLimit;
+
+	public static List<String> rewardList;
+	public static ArrayList<Integer> rewardPro;
+	public static int rewardProSum;
 
 	public static EntityType getStage1Type() {
 		return stage1Type;
@@ -107,14 +113,28 @@ public class GlobalData {
 			System.out.print(temp);
 			String tempSplit[] = temp.split("[.]");
 			if (tempSplit.length == 2 && tempSplit[0].equals("accept")) {
-				//plugin.getLogger().info(temp);
+				// plugin.getLogger().info(temp);
 				int tempLimit = plugin.getConfig().getInt(temp);
 				tasksLimit.put(tempSplit[1], tempLimit);
 			}
 		}
+		rewardList = plugin.getConfig().getStringList("reward");
+		rewardPro = new ArrayList<Integer>();
+		int i = 0;
+		for (String temp : rewardList) {
+			String[] s = temp.split(";");
+			int pro = Integer.parseInt(s[s.length - 1]);
+			if (i == 0)
+				rewardPro.add(pro);
+			else
+				rewardPro.add(pro + rewardPro.get(i - 1));
+			i++;
+			rewardProSum += pro;
+		}
+		System.out.print(rewardPro + " " + rewardProSum);
 	}
 
-	private static int random(int min, int max) {
+	public static int random(int min, int max) {
 		double ran = Math.random() * (max - min + 1) + min;
 		return (int) ran;
 	}
