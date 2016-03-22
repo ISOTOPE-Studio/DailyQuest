@@ -93,10 +93,8 @@ public class GlobalData {
 		res.next();
 		stage1Type = EntityType.valueOf(res.getString("stage1Type"));
 		stage1Limit = res.getInt("stage1Num");
-		System.out.println(stage1Type + ": " + stage1Limit);
 		stage2Type = Material.getMaterial(res.getString("stage2Type"));
 		stage2Limit = res.getInt("stage2Num");
-		System.out.println(stage2Type + ": " + stage2Limit);
 		stage3Location = new Location[10];
 		res = statement.executeQuery("select * from globalstage3;");
 		for (int i = 0; i < 10; i++) {
@@ -110,7 +108,6 @@ public class GlobalData {
 		Iterator<String> it = limitSet.iterator();
 		while (it.hasNext()) {
 			String temp = it.next();
-			System.out.print(temp);
 			String tempSplit[] = temp.split("[.]");
 			if (tempSplit.length == 2 && tempSplit[0].equals("accept")) {
 				// plugin.getLogger().info(temp);
@@ -131,7 +128,6 @@ public class GlobalData {
 			i++;
 			rewardProSum += pro;
 		}
-		System.out.print(rewardPro + " " + rewardProSum);
 	}
 
 	public static int random(int min, int max) {

@@ -21,7 +21,7 @@ public class PlayerData {
 	public static int getStage(Player player) {
 		ResultSet res;
 		try {
-			res = statement.executeQuery("select * from players where name=\"" + player.getName() + "\";");
+			res = statement.executeQuery("select * from players where name=\"" + player.getName().toLowerCase() + "\";");
 			if (res.next()) {
 				return res.getInt("stage");
 			} else
@@ -34,7 +34,7 @@ public class PlayerData {
 	public static int getStep(Player player) {
 		ResultSet res;
 		try {
-			res = statement.executeQuery("select * from players where name=\"" + player.getName() + "\";");
+			res = statement.executeQuery("select * from players where name=\"" + player.getName().toLowerCase() + "\";");
 			if (res.next()) {
 				return res.getInt("step");
 			} else
@@ -47,7 +47,7 @@ public class PlayerData {
 	public static int getTimes(Player player) {
 		ResultSet res;
 		try {
-			res = statement.executeQuery("select * from players where name=\"" + player.getName() + "\";");
+			res = statement.executeQuery("select * from players where name=\"" + player.getName().toLowerCase() + "\";");
 			if (res.next()) {
 				return res.getInt("times");
 			} else
@@ -60,11 +60,11 @@ public class PlayerData {
 	public static void setStage(Player player, int i) {
 		ResultSet res;
 		try {
-			res = statement.executeQuery("select * from players where name=\"" + player.getName() + "\";");
+			res = statement.executeQuery("select * from players where name=\"" + player.getName().toLowerCase() + "\";");
 			if (res.next())
-				statement.executeUpdate("update players set stage=" + i + " where name=\"" + player.getName() + "\";");
+				statement.executeUpdate("update players set stage=" + i + " where name=\"" + player.getName().toLowerCase() + "\";");
 			else
-				statement.executeUpdate("insert into players values(\"" + player.getName() + "\"," + i + ",0,0);");
+				statement.executeUpdate("insert into players values(\"" + player.getName().toLowerCase() + "\"," + i + ",0,0);");
 		} catch (SQLException e) {
 			System.out.print("设置Stage出错！");
 			return;
@@ -73,7 +73,7 @@ public class PlayerData {
 
 	public static void setStep(Player player, int i) {
 		try {
-			statement.executeUpdate("update players set step=" + i + " where name=\"" + player.getName() + "\";");
+			statement.executeUpdate("update players set step=" + i + " where name=\"" + player.getName().toLowerCase() + "\";");
 		} catch (SQLException e) {
 			System.out.print("设置Step出错！");
 			return;
@@ -82,7 +82,7 @@ public class PlayerData {
 
 	public static void increaseStep(Player player, int i) {
 		try {
-			statement.executeUpdate("update players set step=step+" + i + " where name=\"" + player.getName() + "\";");
+			statement.executeUpdate("update players set step=step+" + i + " where name=\"" + player.getName().toLowerCase() + "\";");
 		} catch (SQLException e) {
 			System.out.print("设置Step出错！");
 			return;
@@ -92,7 +92,7 @@ public class PlayerData {
 	public static void increaseTimes(Player player, int i) {
 		try {
 			statement
-					.executeUpdate("update players set times=times+" + i + " where name=\"" + player.getName() + "\";");
+					.executeUpdate("update players set times=times+" + i + " where name=\"" + player.getName().toLowerCase() + "\";");
 		} catch (SQLException e) {
 			System.out.print("设置Step出错！");
 			return;
@@ -129,7 +129,6 @@ public class PlayerData {
 		int index = 0;
 		while (true) {
 			if (GlobalData.rewardPro.get(index) < n) {
-				System.out.print(GlobalData.rewardPro.get(index) + ":" + n);
 				index++;
 				continue;
 			}

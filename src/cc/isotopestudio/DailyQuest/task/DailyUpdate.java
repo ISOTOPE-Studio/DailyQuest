@@ -30,7 +30,6 @@ public class DailyUpdate extends BukkitRunnable {
 		java.util.Date todayDate = new java.util.Date();
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
 		String today = format.format(todayDate);
-		System.out.println(today);
 		try {
 			res = statement.executeQuery("select * from global;");
 		} catch (SQLException e1) {
@@ -42,9 +41,7 @@ public class DailyUpdate extends BukkitRunnable {
 					ifTableExist = true;
 					java.util.Date dayDate = new java.util.Date((res.getDate("today").getTime()));
 					String day = format.format(dayDate);
-					System.out.println(day);
 					if (day.equals(today)) {
-						System.out.println("true");
 						GlobalData.insertInformation(plugin, statement);
 						return;
 					}

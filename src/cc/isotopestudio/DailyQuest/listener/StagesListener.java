@@ -25,7 +25,6 @@ public class StagesListener implements Listener {
 
 	@EventHandler
 	public void onStage1(EntityDeathEvent e) {
-		System.out.print("1");
 		if (!(e.getEntity() instanceof LivingEntity))
 			return;
 		LivingEntity dead = e.getEntity();
@@ -38,7 +37,6 @@ public class StagesListener implements Listener {
 		if (PlayerData.getStage(player) != 1) {
 			return;
 		}
-		System.out.print("3");
 		PlayerData.increaseStep(player, 1);
 		if (PlayerData.getStep(player) >= GlobalData.getStage1Limit()) {
 			PlayerData.setStage(player, 2);
@@ -50,16 +48,15 @@ public class StagesListener implements Listener {
 
 			return;
 		} else {
-			player.sendMessage("Progress: " + PlayerData.getStep(player) + "/" + GlobalData.getStage1Limit());
+			player.sendMessage(new StringBuilder(DailyQuest.prefix).append(ChatColor.GREEN)
+					.append("第一阶段 已完成: " + PlayerData.getStep(player) + " / " + GlobalData.getStage1Limit())
+					.toString());
 		}
 	}
 
 	@EventHandler
 	public void onStage2(BlockBreakEvent e) {
 		Player player = e.getPlayer();
-		System.out.print("1");
-		System.out.print(e.getBlock().getType().toString());
-		System.out.print(GlobalData.getStage2Type().toString());
 		if (!e.getBlock().getType().equals(GlobalData.getStage2Type())) {
 			return;
 		}
@@ -78,7 +75,9 @@ public class StagesListener implements Listener {
 
 			return;
 		} else {
-			player.sendMessage("Progress: " + PlayerData.getStep(player) + "/" + GlobalData.getStage2Limit());
+			player.sendMessage(new StringBuilder(DailyQuest.prefix).append(ChatColor.GREEN)
+					.append("第二阶段 已完成: " + PlayerData.getStep(player) + " / " + GlobalData.getStage2Limit())
+					.toString());
 		}
 	}
 
@@ -90,9 +89,6 @@ public class StagesListener implements Listener {
 		}
 		Location playerLoc = player.getLocation();
 		Location requiredLoc = GlobalData.getStage3Location(PlayerData.getStep(player));
-		player.sendMessage("LOC");
-		player.sendMessage(playerLoc.getBlockX() + "x/x" + requiredLoc.getBlockX());
-		player.sendMessage(playerLoc.getBlockZ() + "z/z" + requiredLoc.getBlockZ());
 		if (Math.abs(playerLoc.getBlockX() - requiredLoc.getBlockX()) >= 10)
 			return;
 		if (Math.abs(playerLoc.getBlockZ() - requiredLoc.getBlockZ()) >= 10)
@@ -108,7 +104,11 @@ public class StagesListener implements Listener {
 			PlayerData.sendReward(player);
 			return;
 		} else {
-			player.sendMessage("Progress: " + PlayerData.getStep(player) + "/10");
+			Location loc = GlobalData.getStage3Location(PlayerData.getStep(player));
+			player.sendMessage(new StringBuilder(DailyQuest.prefix).append(ChatColor.GREEN)
+					.append("第三阶段 已完成: " + PlayerData.getStep(player) + " / 10").toString());
+			player.sendMessage(new StringBuilder("    ").append(ChatColor.RED)
+					.append("下一个地点：X " + loc.getBlockX() + " Z " + loc.getBlockZ()).toString());
 		}
 	}
 

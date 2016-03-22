@@ -43,8 +43,8 @@ public class CommandQuest implements CommandExecutor {
 					return true;
 				}
 				if (args[0].equalsIgnoreCase("info")) {
-					player.sendMessage(new StringBuilder(DailyQuest.prefix).append(ChatColor.AQUA)
-							.append("==== 任务信息 ====").toString());
+					player.sendMessage(
+							new StringBuilder(DailyQuest.prefix).append(ChatColor.GREEN).append("任务信息").toString());
 					player.sendMessage(
 							new StringBuilder().append(ChatColor.YELLOW)
 									.append("你今天已做任务" + PlayerData.getTimes(player) + "次，还可以做"
@@ -96,8 +96,8 @@ public class CommandQuest implements CommandExecutor {
 					return true;
 				}
 				if (args[0].equalsIgnoreCase("today")) {
-					player.sendMessage(new StringBuilder(DailyQuest.prefix).append(ChatColor.GOLD)
-							.append("==== 今日任务 ====").toString());
+					player.sendMessage(
+							new StringBuilder(DailyQuest.prefix).append(ChatColor.GREEN).append("今日任务").toString());
 					player.sendMessage(new StringBuilder("    ").append(ChatColor.RED)
 							.append("杀死 " + GlobalData.getStage1Limit() + " 只" + GlobalData.getStage1Type().toString())
 							.toString());
@@ -115,16 +115,13 @@ public class CommandQuest implements CommandExecutor {
 
 			} else {
 				player.sendMessage(
-						new StringBuilder(DailyQuest.prefix).append(ChatColor.AQUA).append("==== 帮助 ====").toString());
+						new StringBuilder(DailyQuest.prefix).append(ChatColor.GREEN).append("帮助菜单").toString());
 				sender.sendMessage(
-						new StringBuilder().append(ChatColor.GOLD).append("/renwu accept").append(ChatColor.GRAY)
-								.append(" - ").append(ChatColor.LIGHT_PURPLE).append("开始每日任务").toString());
+						new StringBuilder().append(ChatColor.GREEN).append("/renwu accept 开始每日任务").toString());
 				sender.sendMessage(
-						new StringBuilder().append(ChatColor.GOLD).append("/renwu info").append(ChatColor.GRAY)
-								.append(" - ").append(ChatColor.LIGHT_PURPLE).append("查看你的任务信息").toString());
+						new StringBuilder().append(ChatColor.GREEN).append("/renwu info 查看你的任务信息").toString());
 				sender.sendMessage(
-						new StringBuilder().append(ChatColor.GOLD).append("/renwu today").append(ChatColor.GRAY)
-								.append(" - ").append(ChatColor.LIGHT_PURPLE).append("查看今日任务信息").toString());
+						new StringBuilder().append(ChatColor.GREEN).append("/renwu today 查看今日任务信息").toString());
 				return true;
 			}
 		}
