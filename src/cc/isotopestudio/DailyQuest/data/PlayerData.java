@@ -9,10 +9,14 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import cc.isotopestudio.DailyQuest.DailyQuest;
+import cc.isotopestudio.DailyQuest.util.ParticleEffect;
 
 public class PlayerData {
 
@@ -21,7 +25,8 @@ public class PlayerData {
 	public static int getStage(Player player) {
 		ResultSet res;
 		try {
-			res = statement.executeQuery("select * from players where name=\"" + player.getName().toLowerCase() + "\";");
+			res = statement
+					.executeQuery("select * from players where name=\"" + player.getName().toLowerCase() + "\";");
 			if (res.next()) {
 				return res.getInt("stage");
 			} else
@@ -34,7 +39,8 @@ public class PlayerData {
 	public static int getStep(Player player) {
 		ResultSet res;
 		try {
-			res = statement.executeQuery("select * from players where name=\"" + player.getName().toLowerCase() + "\";");
+			res = statement
+					.executeQuery("select * from players where name=\"" + player.getName().toLowerCase() + "\";");
 			if (res.next()) {
 				return res.getInt("step");
 			} else
@@ -47,7 +53,8 @@ public class PlayerData {
 	public static int getTimes(Player player) {
 		ResultSet res;
 		try {
-			res = statement.executeQuery("select * from players where name=\"" + player.getName().toLowerCase() + "\";");
+			res = statement
+					.executeQuery("select * from players where name=\"" + player.getName().toLowerCase() + "\";");
 			if (res.next()) {
 				return res.getInt("times");
 			} else
@@ -60,11 +67,14 @@ public class PlayerData {
 	public static void setStage(Player player, int i) {
 		ResultSet res;
 		try {
-			res = statement.executeQuery("select * from players where name=\"" + player.getName().toLowerCase() + "\";");
+			res = statement
+					.executeQuery("select * from players where name=\"" + player.getName().toLowerCase() + "\";");
 			if (res.next())
-				statement.executeUpdate("update players set stage=" + i + " where name=\"" + player.getName().toLowerCase() + "\";");
+				statement.executeUpdate(
+						"update players set stage=" + i + " where name=\"" + player.getName().toLowerCase() + "\";");
 			else
-				statement.executeUpdate("insert into players values(\"" + player.getName().toLowerCase() + "\"," + i + ",0,0);");
+				statement.executeUpdate(
+						"insert into players values(\"" + player.getName().toLowerCase() + "\"," + i + ",0,0);");
 		} catch (SQLException e) {
 			System.out.print("设置Stage出错！");
 			return;
@@ -73,7 +83,8 @@ public class PlayerData {
 
 	public static void setStep(Player player, int i) {
 		try {
-			statement.executeUpdate("update players set step=" + i + " where name=\"" + player.getName().toLowerCase() + "\";");
+			statement.executeUpdate(
+					"update players set step=" + i + " where name=\"" + player.getName().toLowerCase() + "\";");
 		} catch (SQLException e) {
 			System.out.print("设置Step出错！");
 			return;
@@ -82,7 +93,8 @@ public class PlayerData {
 
 	public static void increaseStep(Player player, int i) {
 		try {
-			statement.executeUpdate("update players set step=step+" + i + " where name=\"" + player.getName().toLowerCase() + "\";");
+			statement.executeUpdate(
+					"update players set step=step+" + i + " where name=\"" + player.getName().toLowerCase() + "\";");
 		} catch (SQLException e) {
 			System.out.print("设置Step出错！");
 			return;
@@ -91,8 +103,8 @@ public class PlayerData {
 
 	public static void increaseTimes(Player player, int i) {
 		try {
-			statement
-					.executeUpdate("update players set times=times+" + i + " where name=\"" + player.getName().toLowerCase() + "\";");
+			statement.executeUpdate(
+					"update players set times=times+" + i + " where name=\"" + player.getName().toLowerCase() + "\";");
 		} catch (SQLException e) {
 			System.out.print("设置Step出错！");
 			return;
@@ -121,6 +133,36 @@ public class PlayerData {
 			return false;
 		} else
 			return true;
+	}
+
+	public static void sendDirection(Player player, DailyQuest plugin) {
+		Location a = player.getEyeLocation();
+		Location b = GlobalData.getStage3Location(getStep(player));
+		if (!a.getWorld().equals(b.getWorld())) {
+			player.sendMessage(new StringBuilder(DailyQuest.prefix).append(ChatColor.RED)
+					.append("这里不是资源世界, 请前往资源世界的指定地点").toString());
+			return;
+		}
+		int x = b.getBlockX() - a.getBlockX();
+		int y = 0;
+		int z = b.getBlockZ() - a.getBlockZ();
+		Vector v = new Vector(x, y, z);
+		Double scale = 0.5 / v.length();
+		v.multiply(scale);
+		System.out.println(v.toString());
+		sendEffect(v, player, 0, plugin);
+	}
+
+	static void sendEffect(final Vector v, final Player player, int i, DailyQuest plugin) {
+		new BukkitRunnable() {
+			public void run() {
+				if (i < 7) {
+					sendEffect(v, player, i + 1, plugin);
+				}
+				ParticleEffect.FLAME.display(v, 1, player.getEyeLocation(), player);
+			}
+		}.runTaskLater(plugin, 10);
+
 	}
 
 	public static void sendReward(Player player) {

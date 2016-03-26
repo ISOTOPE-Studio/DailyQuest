@@ -12,6 +12,13 @@ import cc.isotopestudio.DailyQuest.data.GlobalData;
 import cc.isotopestudio.DailyQuest.data.PlayerData;
 
 public class CommandQuest implements CommandExecutor {
+
+	private final DailyQuest plugin;
+
+	public CommandQuest(DailyQuest plugin) {
+		this.plugin = plugin;
+	}
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (cmd.getName().equalsIgnoreCase("quest")) {
@@ -28,6 +35,11 @@ public class CommandQuest implements CommandExecutor {
 								.append("你不能再接受新的任务了").toString());
 						return true;
 					}
+					if (PlayerData.getStage(player) >= 4) {
+						player.sendMessage(new StringBuilder(DailyQuest.prefix).append(ChatColor.BLUE)
+								.append("任务已完成，未领取奖励").toString());
+						return true;
+					}
 					if (PlayerData.getStage(player) >= 1) {
 						player.sendMessage(new StringBuilder(DailyQuest.prefix).append(ChatColor.BLUE).append("任务正在进行")
 								.toString());
@@ -38,7 +50,7 @@ public class CommandQuest implements CommandExecutor {
 							new StringBuilder(DailyQuest.prefix).append(ChatColor.YELLOW).append("任务现在开始！").toString());
 					player.sendMessage(new StringBuilder("    ").append(ChatColor.BLUE).append("任务进行到第一阶段").toString());
 					player.sendMessage(new StringBuilder("    ").append(ChatColor.RED)
-							.append("杀死 " + GlobalData.getStage1Limit() + " 只" + GlobalData.getStage1Type().toString())
+							.append("杀死 " + GlobalData.getStage1Limit() + " 只" + GlobalData.getStage1TypeName())
 							.toString());
 					return true;
 				}
@@ -60,8 +72,8 @@ public class CommandQuest implements CommandExecutor {
 						case (1): {
 							player.sendMessage(
 									new StringBuilder("    ").append(ChatColor.BLUE).append("任务进行到第一阶段").toString());
-							player.sendMessage(new StringBuilder("    ").append(ChatColor.RED).append(
-									"杀死 " + GlobalData.getStage1Limit() + " 只" + GlobalData.getStage1Type().toString())
+							player.sendMessage(new StringBuilder("    ").append(ChatColor.RED)
+									.append("杀死 " + GlobalData.getStage1Limit() + " 只" + GlobalData.getStage1TypeName())
 									.toString());
 							player.sendMessage(new StringBuilder("    ").append(ChatColor.RED)
 									.append("你已完成 " + PlayerData.getStep(player) + " 只").toString());
@@ -70,8 +82,8 @@ public class CommandQuest implements CommandExecutor {
 						case (2): {
 							player.sendMessage(
 									new StringBuilder("    ").append(ChatColor.BLUE).append("任务进行到第二阶段").toString());
-							player.sendMessage(new StringBuilder("    ").append(ChatColor.RED).append(
-									"挖 " + GlobalData.getStage2Limit() + " 个" + GlobalData.getStage2Type().toString())
+							player.sendMessage(new StringBuilder("    ").append(ChatColor.RED)
+									.append("挖 " + GlobalData.getStage2Limit() + " 个" + GlobalData.getStage2TypeName())
 									.toString());
 							player.sendMessage(new StringBuilder("    ").append(ChatColor.RED)
 									.append("你已完成 " + PlayerData.getStep(player) + " 个").toString());
@@ -81,12 +93,20 @@ public class CommandQuest implements CommandExecutor {
 							Location loc = GlobalData.getStage3Location(PlayerData.getStep(player));
 							player.sendMessage(
 									new StringBuilder("    ").append(ChatColor.BLUE).append("任务进行到第三阶段").toString());
-							player.sendMessage(
-									new StringBuilder("    ").append(ChatColor.RED).append("到达 10 个指定地点").toString());
+							player.sendMessage(new StringBuilder("    ").append(ChatColor.RED)
+									.append("到达 10 个指定地点(在资源世界)").toString());
 							player.sendMessage(new StringBuilder("    ").append(ChatColor.RED)
 									.append("你已完成 " + PlayerData.getStep(player) + " 个").toString());
 							player.sendMessage(new StringBuilder("    ").append(ChatColor.RED)
 									.append("下一个地点：X " + loc.getBlockX() + " Z " + loc.getBlockZ()).toString());
+							PlayerData.sendDirection(player, plugin);
+							break;
+						}
+						case (4): {
+							player.sendMessage(
+									new StringBuilder("    ").append(ChatColor.BLUE).append("任务已完成，未领取奖励").toString());
+							player.sendMessage(new StringBuilder("    ").append(ChatColor.GREEN)
+									.append("请输入 /renwu award 领取奖励").toString());
 							break;
 						}
 						}
@@ -98,15 +118,25 @@ public class CommandQuest implements CommandExecutor {
 				if (args[0].equalsIgnoreCase("today")) {
 					player.sendMessage(
 							new StringBuilder(DailyQuest.prefix).append(ChatColor.GREEN).append("今日任务").toString());
-					player.sendMessage(new StringBuilder("    ").append(ChatColor.RED)
-							.append("杀死 " + GlobalData.getStage1Limit() + " 只" + GlobalData.getStage1Type().toString())
+					player.sendMessage(new StringBuilder("    ").append(ChatColor.RED).append(
+							"杀死 " + GlobalData.getStage1Limit() + " 只" + GlobalData.getStage1TypeName().toString())
 							.toString());
-					player.sendMessage(new StringBuilder("    ").append(ChatColor.RED)
-							.append("挖 " + GlobalData.getStage2Limit() + " 个" + GlobalData.getStage2Type().toString())
+					player.sendMessage(new StringBuilder("    ").append(ChatColor.RED).append(
+							"挖 " + GlobalData.getStage2Limit() + " 个" + GlobalData.getStage2TypeName().toString())
 							.toString());
 					player.sendMessage(
-							new StringBuilder("    ").append(ChatColor.RED).append("到达 10 个指定地点").toString());
+							new StringBuilder("    ").append(ChatColor.RED).append("到达 10 个指定地点(在资源世界)").toString());
 
+					return true;
+				}
+				if (args[0].equalsIgnoreCase("award")) {
+					if (PlayerData.getStage(player) != 4) {
+						player.sendMessage(new StringBuilder(DailyQuest.prefix).append(ChatColor.RED)
+								.append("你没有可领取的奖励").toString());
+						return true;
+					}
+					PlayerData.sendReward(player);
+					PlayerData.setStage(player, 0);
 					return true;
 				}
 				sender.sendMessage(new StringBuilder(DailyQuest.prefix).append(ChatColor.RED)
@@ -118,6 +148,8 @@ public class CommandQuest implements CommandExecutor {
 						new StringBuilder(DailyQuest.prefix).append(ChatColor.GREEN).append("帮助菜单").toString());
 				sender.sendMessage(
 						new StringBuilder().append(ChatColor.GREEN).append("/renwu accept 开始每日任务").toString());
+				sender.sendMessage(
+						new StringBuilder().append(ChatColor.GREEN).append("/renwu award 领取任务奖励").toString());
 				sender.sendMessage(
 						new StringBuilder().append(ChatColor.GREEN).append("/renwu info 查看你的任务信息").toString());
 				sender.sendMessage(

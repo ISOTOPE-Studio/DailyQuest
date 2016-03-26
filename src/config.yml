@@ -17,12 +17,12 @@ accept:
 stage1:
   monsters:
   - ZOMBIE
-  - SKELETON
+  - SKELETON:÷¼÷Ã
   minNum: 5
   maxNum: 20
 stage2:
   ores:
-  - COAL_ORE
+  - COAL_ORE:Ìú¿ó
   - DIAMOND_ORE
   - EMERALD_ORE
   - IRON_ORE

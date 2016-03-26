@@ -18,7 +18,7 @@ import cc.isotopestudio.DailyQuest.util.SqlManager;
 public class DailyQuest extends JavaPlugin {
 	public static final String prefix = (new StringBuilder()).append(ChatColor.GOLD).append(ChatColor.BOLD).append("[")
 			.append("每日任务").append("]").append(ChatColor.RESET).toString();
-	public static final String pluginName = "DailyQuest test 0.0.1.3";
+	public static final String pluginName = "DailyQuest";
 
 	// mySQL
 	public static MySQL MySQL;
@@ -46,7 +46,7 @@ public class DailyQuest extends JavaPlugin {
 
 		BukkitTask task1 = new DailyUpdate(this).runTaskTimer(this, 10, 36000);
 
-		this.getCommand("quest").setExecutor(new CommandQuest());
+		this.getCommand("quest").setExecutor(new CommandQuest(this));
 		PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(new StagesListener(this), this);
 		pm.registerEvents(new JoinListener(this), this);

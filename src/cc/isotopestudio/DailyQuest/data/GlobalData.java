@@ -18,8 +18,10 @@ import cc.isotopestudio.DailyQuest.DailyQuest;
 public class GlobalData {
 
 	private static EntityType stage1Type;
+	private static String stage1TypeName;
 	private static int stage1Limit;
 	private static Material stage2Type;
+	private static String stage2TypeName;
 	private static int stage2Limit;
 	private static Location[] stage3Location;
 
@@ -33,12 +35,20 @@ public class GlobalData {
 		return stage1Type;
 	}
 
+	public static String getStage1TypeName() {
+		return stage1TypeName;
+	}
+
 	public static int getStage1Limit() {
 		return stage1Limit;
 	}
 
 	public static Material getStage2Type() {
 		return stage2Type;
+	}
+
+	public static String getStage2TypeName() {
+		return stage2TypeName;
 	}
 
 	public static int getStage2Limit() {
@@ -91,9 +101,13 @@ public class GlobalData {
 		// Insert to database and plugin variables
 		ResultSet res = statement.executeQuery("select * from global;");
 		res.next();
-		stage1Type = EntityType.valueOf(res.getString("stage1Type"));
+		String[] stage1Temp = res.getString("stage1Type").split(":");
+		String[] stage2Temp = res.getString("stage2Type").split(":");
+		stage1Type = EntityType.valueOf(stage1Temp[0]);
+		stage1TypeName = (stage1Temp.length == 1) ? stage1Temp[0] : stage1Temp[1];
 		stage1Limit = res.getInt("stage1Num");
-		stage2Type = Material.getMaterial(res.getString("stage2Type"));
+		stage2Type = Material.getMaterial(stage2Temp[0]);
+		stage2TypeName = (stage2Temp.length == 1) ? stage2Temp[0] : stage2Temp[1];
 		stage2Limit = res.getInt("stage2Num");
 		stage3Location = new Location[10];
 		res = statement.executeQuery("select * from globalstage3;");

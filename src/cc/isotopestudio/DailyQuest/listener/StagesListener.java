@@ -43,8 +43,7 @@ public class StagesListener implements Listener {
 			PlayerData.setStep(player, 0);
 			player.sendMessage(new StringBuilder("    ").append(ChatColor.BLUE).append("任务进行到第二阶段").toString());
 			player.sendMessage(new StringBuilder("    ").append(ChatColor.RED)
-					.append("挖 " + GlobalData.getStage2Limit() + " 个" + GlobalData.getStage2Type().toString())
-					.toString());
+					.append("挖 " + GlobalData.getStage2Limit() + " 个" + GlobalData.getStage2TypeName()).toString());
 
 			return;
 		} else {
@@ -68,11 +67,11 @@ public class StagesListener implements Listener {
 			PlayerData.setStage(player, 3);
 			PlayerData.setStep(player, 0);
 			player.sendMessage(new StringBuilder("    ").append(ChatColor.BLUE).append("任务进行到第三阶段").toString());
-			player.sendMessage(new StringBuilder("    ").append(ChatColor.RED).append("到达 10 个指定地点").toString());
+			player.sendMessage(new StringBuilder("    ").append(ChatColor.RED).append("到达 10 个指定地点(在资源世界)").toString());
 			Location loc = GlobalData.getStage3Location(PlayerData.getStep(player));
 			player.sendMessage(new StringBuilder("    ").append(ChatColor.RED)
 					.append("下一个地点：X " + loc.getBlockX() + " Z " + loc.getBlockZ()).toString());
-
+			PlayerData.sendDirection(player, plugin);
 			return;
 		} else {
 			player.sendMessage(new StringBuilder(DailyQuest.prefix).append(ChatColor.GREEN)
@@ -95,13 +94,13 @@ public class StagesListener implements Listener {
 			return;
 		PlayerData.increaseStep(player, 1);
 		if (PlayerData.getStep(player) >= 10) {
-			PlayerData.setStage(player, 0);
+			PlayerData.setStage(player, 4);
 			PlayerData.setStep(player, 0);
 			PlayerData.increaseTimes(player, 1);
 			player.sendMessage(
 					new StringBuilder(DailyQuest.prefix).append(ChatColor.YELLOW).append("任务完成！").toString());
-
-			PlayerData.sendReward(player);
+			player.sendMessage(
+					new StringBuilder("    ").append(ChatColor.GREEN).append("请输入 /renwu award 领取奖励").toString());
 			return;
 		} else {
 			Location loc = GlobalData.getStage3Location(PlayerData.getStep(player));
@@ -109,6 +108,7 @@ public class StagesListener implements Listener {
 					.append("第三阶段 已完成: " + PlayerData.getStep(player) + " / 10").toString());
 			player.sendMessage(new StringBuilder("    ").append(ChatColor.RED)
 					.append("下一个地点：X " + loc.getBlockX() + " Z " + loc.getBlockZ()).toString());
+			PlayerData.sendDirection(player, plugin);
 		}
 	}
 
