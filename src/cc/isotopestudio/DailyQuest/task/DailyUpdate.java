@@ -12,9 +12,16 @@ import cc.isotopestudio.DailyQuest.data.GlobalData;
 
 public class DailyUpdate extends BukkitRunnable {
 	private final DailyQuest plugin;
+	private final boolean force;
 
 	public DailyUpdate(DailyQuest plugin) {
 		this.plugin = plugin;
+		this.force = false;
+	}
+
+	public DailyUpdate(DailyQuest plugin, boolean force) {
+		this.plugin = plugin;
+		this.force = force;
 	}
 
 	@Override
@@ -33,9 +40,10 @@ public class DailyUpdate extends BukkitRunnable {
 		try {
 			res = statement.executeQuery("select * from global;");
 		} catch (SQLException e1) {
+			// if table does not exist
 			ifTableExist = false;
 		}
-		if (ifTableExist)
+		if (ifTableExist && !force) // Check if date is correct
 			try {
 				if (res.next()) {
 					ifTableExist = true;
@@ -50,7 +58,7 @@ public class DailyUpdate extends BukkitRunnable {
 				e1.printStackTrace();
 			}
 		try {
-			if (ifTableExist) {
+			if (ifTableExist || force) {
 				// Delete tables
 				statement.executeUpdate("drop table global;");
 				statement.executeUpdate("drop table globalstage3;");
@@ -71,6 +79,7 @@ public class DailyUpdate extends BukkitRunnable {
 			e1.printStackTrace();
 		}
 		// Update global information
+		plugin.reloadConfig();
 		GlobalData.update(plugin, statement, today);
 
 	}

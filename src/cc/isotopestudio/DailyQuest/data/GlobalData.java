@@ -131,6 +131,7 @@ public class GlobalData {
 		}
 		rewardList = plugin.getConfig().getStringList("reward");
 		rewardPro = new ArrayList<Integer>();
+		rewardProSum = 0;
 		int i = 0;
 		for (String temp : rewardList) {
 			String[] s = temp.split(";");

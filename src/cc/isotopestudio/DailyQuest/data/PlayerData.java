@@ -169,6 +169,7 @@ public class PlayerData {
 
 		int n = GlobalData.random(0, GlobalData.rewardProSum);
 		int index = 0;
+		System.out.print(GlobalData.rewardPro + ":" + n + ":" + GlobalData.rewardProSum);
 		while (true) {
 			if (GlobalData.rewardPro.get(index) < n) {
 				index++;
@@ -182,7 +183,7 @@ public class PlayerData {
 		ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 		for (int i = 0; i < commands.length - 1; i++) {
 			Bukkit.dispatchCommand(console, commands[i]);
-			player.sendMessage("Debug：获得命令" + commands[i]);
+			// player.sendMessage("Debug：获得命令" + commands[i]);
 		}
 		player.sendMessage(new StringBuilder(DailyQuest.prefix).append(ChatColor.YELLOW).append("获得奖励！").toString());
 	}

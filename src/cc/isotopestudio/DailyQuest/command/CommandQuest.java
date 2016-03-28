@@ -6,10 +6,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 
 import cc.isotopestudio.DailyQuest.DailyQuest;
 import cc.isotopestudio.DailyQuest.data.GlobalData;
 import cc.isotopestudio.DailyQuest.data.PlayerData;
+import cc.isotopestudio.DailyQuest.task.DailyUpdate;
 
 public class CommandQuest implements CommandExecutor {
 
@@ -22,6 +24,14 @@ public class CommandQuest implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (cmd.getName().equalsIgnoreCase("quest")) {
+			try {
+				if (sender.isOp() && args[0].equalsIgnoreCase("update")) {
+					BukkitTask task1 = new DailyUpdate(plugin, true).runTaskLater(plugin, 10);
+					sender.sendMessage(new StringBuilder(DailyQuest.prefix).append("重置数据库").toString());
+					return true;
+				}
+			} catch (Exception e) {
+			}
 			if (!(sender instanceof Player)) {
 				sender.sendMessage(
 						new StringBuilder(DailyQuest.prefix).append(ChatColor.RED).append("必须要玩家才能执行").toString());
@@ -29,6 +39,10 @@ public class CommandQuest implements CommandExecutor {
 			}
 			Player player = (Player) sender;
 			if (args.length > 0 && !args[0].equalsIgnoreCase("help")) {
+				if (player.isOp() && args[0].equalsIgnoreCase("test")) {
+					for (int i = 0; i <= 100; i++)
+						PlayerData.sendReward(player);
+				}
 				if (args[0].equalsIgnoreCase("accept")) {
 					if (!PlayerData.canAccept(player)) {
 						player.sendMessage(new StringBuilder(DailyQuest.prefix).append(ChatColor.RED)
@@ -139,6 +153,7 @@ public class CommandQuest implements CommandExecutor {
 					PlayerData.setStage(player, 0);
 					return true;
 				}
+
 				sender.sendMessage(new StringBuilder(DailyQuest.prefix).append(ChatColor.RED)
 						.append("未知命令，请输入 /renwu 查看帮助").toString());
 				return true;
