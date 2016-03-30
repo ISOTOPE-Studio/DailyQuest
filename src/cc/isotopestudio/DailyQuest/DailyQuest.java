@@ -6,11 +6,11 @@ import java.sql.Connection;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
 import cc.isotopestudio.DailyQuest.command.CommandQuest;
 import cc.isotopestudio.DailyQuest.listener.JoinListener;
 import cc.isotopestudio.DailyQuest.listener.StagesListener;
+import cc.isotopestudio.DailyQuest.task.CheckUpdate;
 import cc.isotopestudio.DailyQuest.task.DailyUpdate;
 import cc.isotopestudio.DailyQuest.util.MySQL;
 import cc.isotopestudio.DailyQuest.util.SqlManager;
@@ -44,8 +44,8 @@ public class DailyQuest extends JavaPlugin {
 			this.getPluginLoader().disablePlugin(this);
 		}
 
-		BukkitTask task1 = new DailyUpdate(this).runTaskTimer(this, 10, 36000);
-
+		new DailyUpdate(this).runTaskTimer(this, 10, 36000);
+		new CheckUpdate(this).runTaskTimer(this, 100, 1200);
 		this.getCommand("quest").setExecutor(new CommandQuest(this));
 		PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(new StagesListener(this), this);

@@ -30,6 +30,7 @@ public class GlobalData {
 	public static List<String> rewardList;
 	public static ArrayList<Integer> rewardPro;
 	public static int rewardProSum;
+	public static int random;
 
 	public static EntityType getStage1Type() {
 		return stage1Type;
@@ -82,8 +83,10 @@ public class GlobalData {
 		String world = plugin.getConfig().getString("stage3.world");
 		int radius = plugin.getConfig().getInt("stage3.radius");
 		try {
-			statement.executeUpdate("insert into global values(" + today + ",\"" + stage1Monster + "\"," + stage1Num
-					+ ",\"" + stage2Material + "\"," + stage2Num + ");");
+			System.out.print("insert into global values(" + today + "," + random(1000, 9999) + ",\""
+					+ stage1Monster + "\"," + stage1Num + ",\"" + stage2Material + "\"," + stage2Num + ");");
+			statement.executeUpdate("insert into global values(" + today + "," + random(1000, 9999) + ",\""
+					+ stage1Monster + "\"," + stage1Num + ",\"" + stage2Material + "\"," + stage2Num + ");");
 			for (int i = 0; i < 10; i++) {
 				int x = random(-radius, radius);
 				int y = random(-radius, radius);
@@ -101,6 +104,7 @@ public class GlobalData {
 		// Insert to database and plugin variables
 		ResultSet res = statement.executeQuery("select * from global;");
 		res.next();
+		random = res.getInt("random");
 		String[] stage1Temp = res.getString("stage1Type").split(":");
 		String[] stage2Temp = res.getString("stage2Type").split(":");
 		stage1Type = EntityType.valueOf(stage1Temp[0]);

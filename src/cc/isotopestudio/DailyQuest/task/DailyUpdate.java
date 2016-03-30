@@ -67,7 +67,7 @@ public class DailyUpdate extends BukkitRunnable {
 			}
 			// Create tables
 			statement.executeUpdate("create table global(" + "today date not null primary key,"
-					+ "stage1Type tinytext not null," + "stage1Num tinyint not null," + "stage2Type tinytext not null,"
+					+ "random int not null,"+ "stage1Type tinytext not null," + "stage1Num tinyint not null," + "stage2Type tinytext not null,"
 					+ "stage2Num tinyint not null);");
 			statement.executeUpdate("create table globalstage3("
 					+ " id int unsigned not null auto_increment primary key," + " world text not null,"

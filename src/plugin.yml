@@ -4,7 +4,7 @@ main: cc.isotopestudio.DailyQuest.DailyQuest
 author: Mars
 description: Daily Quest
 website: http://isotopestudio.cc
-version: 1.2.0
+version: 1.2.1
 commands:
   Quest:
     description: Raid Command.

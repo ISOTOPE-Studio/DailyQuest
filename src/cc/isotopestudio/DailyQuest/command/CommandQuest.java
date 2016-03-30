@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitTask;
 import cc.isotopestudio.DailyQuest.DailyQuest;
 import cc.isotopestudio.DailyQuest.data.GlobalData;
 import cc.isotopestudio.DailyQuest.data.PlayerData;
+import cc.isotopestudio.DailyQuest.task.CheckUpdate;
 import cc.isotopestudio.DailyQuest.task.DailyUpdate;
 
 public class CommandQuest implements CommandExecutor {
@@ -26,8 +27,13 @@ public class CommandQuest implements CommandExecutor {
 		if (cmd.getName().equalsIgnoreCase("quest")) {
 			try {
 				if (sender.isOp() && args[0].equalsIgnoreCase("update")) {
-					BukkitTask task1 = new DailyUpdate(plugin, true).runTaskLater(plugin, 10);
+					new DailyUpdate(plugin, true).runTaskLater(plugin, 10);
 					sender.sendMessage(new StringBuilder(DailyQuest.prefix).append("÷ÿ÷√ ˝æ›ø‚").toString());
+					return true;
+				}
+				if (sender.isOp() && args[0].equalsIgnoreCase("fix")) {
+					new CheckUpdate(plugin, true).runTaskLater(plugin, 10);
+					sender.sendMessage(new StringBuilder(DailyQuest.prefix).append("≥¢ ‘–ﬁ∏¥").toString());
 					return true;
 				}
 			} catch (Exception e) {
