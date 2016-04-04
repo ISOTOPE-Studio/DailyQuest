@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import cc.isotopestudio.DailyQuest.command.CommandQuest;
 import cc.isotopestudio.DailyQuest.listener.JoinListener;
+import cc.isotopestudio.DailyQuest.listener.Stage3Listener;
 import cc.isotopestudio.DailyQuest.listener.StagesListener;
 import cc.isotopestudio.DailyQuest.task.CheckUpdate;
 import cc.isotopestudio.DailyQuest.task.DailyUpdate;
@@ -46,6 +47,7 @@ public class DailyQuest extends JavaPlugin {
 
 		new DailyUpdate(this).runTaskTimer(this, 10, 36000);
 		new CheckUpdate(this).runTaskTimer(this, 100, 1200);
+		new Stage3Listener(this).runTaskTimer(this, 20, 40);
 		this.getCommand("quest").setExecutor(new CommandQuest(this));
 		PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(new StagesListener(this), this);

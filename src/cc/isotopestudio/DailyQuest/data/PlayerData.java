@@ -149,7 +149,6 @@ public class PlayerData {
 		Vector v = new Vector(x, y, z);
 		Double scale = 0.5 / v.length();
 		v.multiply(scale);
-		System.out.println(v.toString());
 		sendEffect(v, player, 0, plugin);
 	}
 
@@ -169,7 +168,6 @@ public class PlayerData {
 
 		int n = GlobalData.random(0, GlobalData.rewardProSum);
 		int index = 0;
-		System.out.print(GlobalData.rewardPro + ":" + n + ":" + GlobalData.rewardProSum);
 		while (true) {
 			if (GlobalData.rewardPro.get(index) < n) {
 				index++;

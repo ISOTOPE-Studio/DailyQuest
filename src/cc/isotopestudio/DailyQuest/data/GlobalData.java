@@ -83,8 +83,6 @@ public class GlobalData {
 		String world = plugin.getConfig().getString("stage3.world");
 		int radius = plugin.getConfig().getInt("stage3.radius");
 		try {
-			System.out.print("insert into global values(" + today + "," + random(1000, 9999) + ",\""
-					+ stage1Monster + "\"," + stage1Num + ",\"" + stage2Material + "\"," + stage2Num + ");");
 			statement.executeUpdate("insert into global values(" + today + "," + random(1000, 9999) + ",\""
 					+ stage1Monster + "\"," + stage1Num + ",\"" + stage2Material + "\"," + stage2Num + ");");
 			for (int i = 0; i < 10; i++) {

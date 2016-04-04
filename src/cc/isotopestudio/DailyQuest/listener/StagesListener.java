@@ -80,36 +80,4 @@ public class StagesListener implements Listener {
 		}
 	}
 
-	@EventHandler
-	public void onStage3(PlayerMoveEvent e) {
-		Player player = e.getPlayer();
-		if (PlayerData.getStage(player) != 3) {
-			return;
-		}
-		Location playerLoc = player.getLocation();
-		Location requiredLoc = GlobalData.getStage3Location(PlayerData.getStep(player));
-		if (Math.abs(playerLoc.getBlockX() - requiredLoc.getBlockX()) >= 10)
-			return;
-		if (Math.abs(playerLoc.getBlockZ() - requiredLoc.getBlockZ()) >= 10)
-			return;
-		PlayerData.increaseStep(player, 1);
-		if (PlayerData.getStep(player) >= 10) {
-			PlayerData.setStage(player, 4);
-			PlayerData.setStep(player, 0);
-			PlayerData.increaseTimes(player, 1);
-			player.sendMessage(
-					new StringBuilder(DailyQuest.prefix).append(ChatColor.YELLOW).append("任务完成！").toString());
-			player.sendMessage(
-					new StringBuilder("    ").append(ChatColor.GREEN).append("请输入 /renwu award 领取奖励").toString());
-			return;
-		} else {
-			Location loc = GlobalData.getStage3Location(PlayerData.getStep(player));
-			player.sendMessage(new StringBuilder(DailyQuest.prefix).append(ChatColor.GREEN)
-					.append("第三阶段 已完成: " + PlayerData.getStep(player) + " / 10").toString());
-			player.sendMessage(new StringBuilder("    ").append(ChatColor.RED)
-					.append("下一个地点：X " + loc.getBlockX() + " Z " + loc.getBlockZ()).toString());
-			PlayerData.sendDirection(player, plugin);
-		}
-	}
-
 }
