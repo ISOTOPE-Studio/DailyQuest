@@ -25,14 +25,14 @@ public class Stage3Listener extends BukkitRunnable {
 			return;
 		for (Player player : players) {
 			if (PlayerData.getStage(player) != 3) {
-				return;
+				continue;
 			}
 			Location playerLoc = player.getLocation();
 			Location requiredLoc = GlobalData.getStage3Location(PlayerData.getStep(player));
 			if (Math.abs(playerLoc.getBlockX() - requiredLoc.getBlockX()) >= 10)
-				return;
+				continue;
 			if (Math.abs(playerLoc.getBlockZ() - requiredLoc.getBlockZ()) >= 10)
-				return;
+				continue;
 			PlayerData.increaseStep(player, 1);
 			if (PlayerData.getStep(player) >= 10) {
 				PlayerData.setStage(player, 4);
@@ -42,7 +42,7 @@ public class Stage3Listener extends BukkitRunnable {
 						new StringBuilder(DailyQuest.prefix).append(ChatColor.YELLOW).append("任务完成！").toString());
 				player.sendMessage(
 						new StringBuilder("    ").append(ChatColor.GREEN).append("请输入 /renwu award 领取奖励").toString());
-				return;
+				continue;
 			} else {
 				Location loc = GlobalData.getStage3Location(PlayerData.getStep(player));
 				player.sendMessage(new StringBuilder(DailyQuest.prefix).append(ChatColor.GREEN)
@@ -50,6 +50,7 @@ public class Stage3Listener extends BukkitRunnable {
 				player.sendMessage(new StringBuilder("    ").append(ChatColor.RED)
 						.append("下一个地点：X " + loc.getBlockX() + " Z " + loc.getBlockZ()).toString());
 				PlayerData.sendDirection(player, plugin);
+				continue;
 			}
 		}
 	}
